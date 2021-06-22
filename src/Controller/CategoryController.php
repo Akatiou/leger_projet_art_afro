@@ -11,10 +11,28 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CategoryController extends AbstractController
 {
+    protected $categoryRepository;
+
+    public function __construct(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
+    public function renderMenuList()
+    {
+        // 1. Aller chercher les catégories dans la base de données (repository)
+        $categories = $this->categoryRepository->findAll();
+
+        // 2. Renvoyer le rendu HTML sous la dorme d'une response ($this->render)
+        return $this->render('category/_menu.html.twig', [
+            'categories' => $categories
+        ]);
+    }
+
+
     //--------------------------------------------------
     //    Création d'une catégorie
     //---------------------------------------------------
