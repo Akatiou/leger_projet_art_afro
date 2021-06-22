@@ -15,19 +15,20 @@
 
 	{# {{ form_widget(formView) }} #}
 
-	<div class="row">
-		<div class="col">
-			{{ form_row(formView.name) }}
-			{{ form_row(formView.price) }}
-			{# </div>
-						<div class="col"> #}
-			{{form_row(formView.mainPicture) }}
-			{{ form_row(formView.category, {'attr': {'class': 'form-select'} }) }}
-			{{ form_row(formView.shortDescription) }}
-		</div>
+	<div
+		class="row">
+		{# <div class="col"> #}
+		{{ form_row(formView.name) }}
+		{{ form_row(formView.price) }}
+		{# </div>
+		<div class="col"> #}
+		{{form_row(formView.mainPicture) }}
+		{{ form_row(formView.category, {'attr': {'class': 'form-select'} }) }}
+		{{ form_row(formView.shortDescription) }}
+		{# </div> #}
 	</div>
 
-	<button type="submit" class="btn btn-primary">
+	<button type="submit" class="btn btn-primary mt-3">
 		<i class="fas fa-save"></i>
 		Créer le produit
 	</button>

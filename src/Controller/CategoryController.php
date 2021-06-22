@@ -15,6 +15,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CategoryController extends AbstractController
 {
+    //--------------------------------------------------
+    //    Création d'une catégorie
+    //---------------------------------------------------
+
     /**
      * @Route("/admin/category/create", name="category_create")
      */
@@ -41,6 +45,10 @@ class CategoryController extends AbstractController
             'formView' => $formView
         ]);
     }
+
+    //--------------------------------------------------
+    //   Modification d'une catégorie
+    //---------------------------------------------------
 
     /**
      * @Route("/admin/category/{id}/edit", name="category_edit")

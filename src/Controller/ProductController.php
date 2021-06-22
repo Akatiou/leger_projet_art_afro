@@ -18,6 +18,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ProductController extends AbstractController
 {
+
+    //--------------------------------------------------
+    //    Afficher les produits selon UNE catégorie
+    //--------------------------------------------------
+
     /**
      * @Route("/{slug}", name="product_category")
      */
@@ -37,6 +42,10 @@ class ProductController extends AbstractController
         ]);
     }
 
+    //--------------------------------------------------
+    //   Afficher le détail d'UN produit
+    //---------------------------------------------------
+
     /**
      * @Route("/{category_slug}/{slug}", name="product_show")
      */
@@ -55,37 +64,9 @@ class ProductController extends AbstractController
             'product' => $product
         ]);
     }
-
-    /**
-     * @Route("/admin/product/{id}/edit", name="product_edit")
-     */
-
-    public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator)
-    {
-        $product = $productRepository->find($id);
-
-        $form = $this->createForm(ProductType::class, $product);
-
-        // $form->setData($product);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            $em->flush();
-
-            return $this->redirectToRoute('product_show', [
-                'category_slug' => $product->getCategory()->getSlug(),
-                'slug' => $product->getSlug()
-            ]);
-        }
-
-        $formView = $form->createView();
-
-        return $this->render('product/edit.html.twig', [
-            'product' => $product,
-            'formView' => $formView
-        ]);
-    }
+    //--------------------------------------------------
+    //    Création d'un produit
+    //---------------------------------------------------
 
     /**
      * @Route("/admin/product/create", name="product_create")
@@ -114,6 +95,39 @@ class ProductController extends AbstractController
         $formView = $form->createView();
 
         return $this->render('product/create.html.twig', [
+            'formView' => $formView
+        ]);
+    }
+
+    //--------------------------------------------------
+    //   Modification d'un produit
+    //---------------------------------------------------
+
+    /**
+     * @Route("/admin/product/{id}/edit", name="product_edit")
+     */
+
+    public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator)
+    {
+        $product = $productRepository->find($id);
+
+        $form = $this->createForm(ProductType::class, $product);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $em->flush();
+
+            return $this->redirectToRoute('product_show', [
+                'category_slug' => $product->getCategory()->getSlug(),
+                'slug' => $product->getSlug()
+            ]);
+        }
+
+        $formView = $form->createView();
+
+        return $this->render('product/edit.html.twig', [
+            'product' => $product,
             'formView' => $formView
         ]);
     }
