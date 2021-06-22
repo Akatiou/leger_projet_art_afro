@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Product;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Asserts;
 
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
@@ -21,6 +23,8 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Asserts\NotBlank(message="Le nom de la catégorie est obligatoire !")
+     * @Asserts\Length(min=3, minMessage="Le nom de la catégorie doit avoir au moins 3 caractères !")
      */
     private $name;
 
@@ -49,7 +53,7 @@ class Category
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
