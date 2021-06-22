@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
+use App\Entity\Category;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Asserts;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -19,11 +21,14 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Asserts\NotBlank(message="Le nom du produit est obligatoire !")
+     * @Asserts\Length(min=3, max=255, minMessage="Le nom du produit doit avoir au moins 3 caractères !")
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
+     * @Asserts\NotBlank(message="Le prix du produit est obligatoire !")
      */
     private $price;
 
@@ -34,6 +39,7 @@ class Product
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
+     * @Asserts\NotBlank(message="Le choix de la catégorie du produit est obligatoire !")
      */
     private $category;
 
@@ -44,8 +50,27 @@ class Product
 
     /**
      * @ORM\Column(type="text")
+     * @Asserts\NotBlank(message="La description du produit est obligatoire !")
+     * @Asserts\Length(min=10, minMessage="La description du produit doit avoir au moins 10 caractères !")
      */
     private $shortDescription;
+
+    // public static function loadValidatorMetadata(ClassMetadata $metadata)
+    // {
+    //     $metadata->addPropertyConstraints('name', [
+    //         new Asserts\NotBlank(['message' => 'Le nom du produit est obligatoire']),
+    //         new Asserts\Length(['min' => 3, 'max' => 255, 'minMessage' => 'Le nom du produit doit contenir au moins 3 caratères'])
+    //     ]);
+
+    //     $metadata->addPropertyConstraint('price', new Asserts\NotBlank(['message' => 'Le prix du produit est obligatoire']));
+
+    //     $metadata->addPropertyConstraint('category', new Asserts\NotBlank(['message' => 'Le choix de la catégorie du produit est obligatoire']));
+
+    //     $metadata->addPropertyConstraints('shortDescription', [
+    //         new Asserts\NotBlank(['message' => 'La description du produit est obligatoire']),
+    //         new Asserts\Length(['min' => 10, 'minMessage' => 'La description du produit doit contenir au moins 10 caratères'])
+    //     ]);
+    // }
 
     public function getId(): ?int
     {
@@ -57,7 +82,7 @@ class Product
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -69,7 +94,7 @@ class Product
         return $this->price;
     }
 
-    public function setPrice(int $price): self
+    public function setPrice(?int $price): self
     {
         $this->price = $price;
 
@@ -117,7 +142,7 @@ class Product
         return $this->shortDescription;
     }
 
-    public function setShortDescription(string $shortDescription): self
+    public function setShortDescription(?string $shortDescription): self
     {
         $this->shortDescription = $shortDescription;
 

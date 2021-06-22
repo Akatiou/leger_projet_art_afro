@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ProductType extends AbstractType
 {
@@ -20,16 +21,19 @@ class ProductType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom du produit',
-                'attr' => ['placeholder' => 'Tapez le nom du produit']
+                'attr' => ['placeholder' => 'Tapez le nom du produit'],
+                'required' => false
             ])
             ->add('shortDescription', TextareaType::class, [
                 'label' => 'Description courte',
-                'attr' => ['placeholder' => 'Tapez une description assez courte mais parlante pour le visiteur']
+                'attr' => ['placeholder' => 'Tapez une description assez courte mais parlante pour le visiteur'],
+                'required' => false
             ])
             ->add('price', MoneyType::class, [
                 'label' => 'Prix du produit',
                 'attr' => ['placeholder' => 'Tapez le prix du produit en €'],
-                'divisor' => 100
+                'divisor' => 100,
+                'required' => false
             ])
             ->add('mainPicture', UrlType::class, [
                 'label' => 'Image du produit',
@@ -39,7 +43,8 @@ class ProductType extends AbstractType
                 'label' => 'Catégorie',
                 'placeholder' => '-- Choisir une catégorie --',
                 'class' => Category::class,
-                'choice_label' => 'name'
+                'choice_label' => 'name',
+                'required' => false
                 // ce commentaire c'est pour mettre le nom de la catégorie en majuscule,
                 // remplacer 'name' par la function si souhaité
                 // ce que je ne souhaite pas faire pour le moment
