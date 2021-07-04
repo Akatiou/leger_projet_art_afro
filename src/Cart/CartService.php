@@ -27,6 +27,15 @@ class CartService
     }
 
     //------------------------------------------------------
+    //   Réinitialiser (vider) le panier après une commande
+    //-------------------------------------------------------
+
+    public function empty()
+    {
+        $this->saveCart([]);
+    }
+
+    //------------------------------------------------------
     //   Ajout dans le panier
     //-------------------------------------------------------
 
@@ -111,6 +120,11 @@ class CartService
     //------------------------------------------------------
     //   Détails des articles du panier
     //-------------------------------------------------------
+
+    /**
+     * 
+     * @return CartItem[]
+     */
     public function getDetailedCartItems(): array
     {
         $detailedCart = [];

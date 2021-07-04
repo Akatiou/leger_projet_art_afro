@@ -30,6 +30,9 @@
 				</li>
 				{% if app.user %}
 					<li class="nav-item">
+						<a href="{{ path('purchase_index')}}" class="nav-link">Mes commandes</a>
+					</li>
+					<li class="nav-item">
 						<a href="{{ path('security_logout') }}" class="btn btn-danger">Déconnexion</a>
 					</li>
 				{% else %}
@@ -42,10 +45,6 @@
 				{% endif %}
 
 			</ul>
-			{# <form class="d-flex">
-															<input class="form-control ml-2 me-sm-2" type="text" placeholder="Rechercher">
-															<button class="btn btn-secondary my-2 my-sm-0" type="submit">Rechercher</button>
-															</form> #}
 		</div>
 	</div>
 </nav>
