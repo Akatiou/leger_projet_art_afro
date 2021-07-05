@@ -2,32 +2,27 @@
 
 namespace App\Controller\Purchase;
 
-use DateTime;
 use App\Entity\Purchase;
 use App\Cart\CartService;
-use App\Entity\PurchaseItem;
 use App\Form\CartConfirmationType;
+use App\Purchase\PurchasePersister;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class PurchaseConfirmationController extends AbstractController
 {
     protected $cartService;
     protected $em;
+    protected $persister;
 
-    public function __construct(CartService $cartService, EntityManagerInterface $em)
+    public function __construct(CartService $cartService, EntityManagerInterface $em, PurchasePersister $persister)
     {
         $this->cartService = $cartService;
         $this->em = $em;
+        $this->persister = $persister;
     }
 
     /**
@@ -51,12 +46,8 @@ class PurchaseConfirmationController extends AbstractController
             return $this->redirectToRoute('cart_show');
         }
 
-        // 3. Si je ne suis pas conectée : dégager
-        $user = $this->getUser();
-
-        // if (!$user) {
-        //     throw new AccessDeniedException("Vous devez être connecté pour confirmer une commande !");
-        // }
+        // 3. Si je ne suis pas conectée : dégager (plus besoin, fait plus haut IsGranted)
+        // $user = $this->getUser();
 
         // 4. S'il n'y a pas de produits dans mon panier : dégager (CartService)
         $cartItems = $this->cartService->getDetailedCartItems();
@@ -68,37 +59,20 @@ class PurchaseConfirmationController extends AbstractController
         }
 
         // 5. Nous allons créer une Purchase
-
         /** @var Purchase */
         $purchase = $form->getData();
 
-        // 6. Nous allons la lier avec l'utilisateur actuellement connecté (Security)
-        $purchase->setUser($user)
-            ->setPurchasedAt(new DateTime())
-            ->setTotal($this->cartService->getTotal());
+        // Les 6., 7. et 8. sont dans Puchase/PurchasePersister.php et on l'appelle avec le persister
 
-        $this->em->persist($purchase);
+        $this->persister->storePurchase($purchase);
 
-        // 7. Nous allons la lier avec les produits qui sont dans le panier (CartService)
-        foreach ($this->cartService->getDetailedCartItems() as $cartItem) {
-            $purchaseItem = new PurchaseItem;
-            $purchaseItem->setPurchase($purchase)
-                ->setProduct($cartItem->product)
-                ->setProductName($cartItem->product->getName())
-                ->setQuantity($cartItem->qty)
-                ->setProductPrice($cartItem->product->getPrice())
-                ->setTotal($cartItem->getTotal());
+        // Vider le panier après confirmation de la commande (On appelle la fonction du CartService.php)
+        // $this->cartService->empty();
 
-            $this->em->persist($purchaseItem);
-        }
+        // $this->addFlash('success', "La commande a bien été enregistré !");
 
-        // 8. Nous allons enregistrer la commande (EntityManagerInterface)
-        $this->em->flush();
-
-        $this->cartService->empty();
-
-        $this->addFlash('success', "La commande a bien été enregistré !");
-
-        return $this->redirectToRoute('purchase_index');
+        return $this->redirectToRoute('purchase_payment_form', [
+            'id' => $purchase->getId()
+        ]);
     }
 }
