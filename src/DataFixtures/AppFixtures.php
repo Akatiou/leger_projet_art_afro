@@ -32,6 +32,9 @@ class AppFixtures extends Fixture
         $faker->addProvider(new \Bezhanov\Faker\Provider\Commerce($faker));
         $faker->addProvider(new \Bluemmb\Faker\PicsumPhotosProvider($faker));
 
+        //--------------------------------------------------
+        //    Création d'un fake admin
+        //--------------------------------------------------
         $admin = new User;
 
         $hash = $this->encoder->encodePassword($admin, "password");
@@ -43,6 +46,9 @@ class AppFixtures extends Fixture
 
         $manager->persist($admin);
 
+        //--------------------------------------------------
+        //    Création de fake utilisateurs
+        //--------------------------------------------------
         $users = [];
 
         for ($u = 0; $u < 5; $u++) {
@@ -59,6 +65,9 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
 
+        //--------------------------------------------------
+        //    Création de fake produits
+        //--------------------------------------------------
         $products = [];
 
         for ($c = 0; $c < 3; $c++) {
@@ -71,11 +80,13 @@ class AppFixtures extends Fixture
             for ($p = 0; $p < mt_rand(15, 20); $p++) {
                 $product = new Product;
                 $product->setName($faker->productName())
-                    ->setPrice($faker->price(10000, 50000))
+                    ->setPrice($faker->price(5000, 20000))
+                    ->setQuantity(mt_rand(3, 8))
                     ->setSlug(strtolower($this->slugger->slug($product->getName())))
                     ->setCategory($category)
                     ->setShortDescription($faker->paragraph())
-                    ->setMainPicture($faker->imageUrl(400, 400, true));
+                    ->setMainPicture($faker->imageUrl(400, 400, true))
+                    ->setCreatedAt($faker->dateTimeBetween('-8 months'));
 
                 $products[] = $product;
 
@@ -83,6 +94,9 @@ class AppFixtures extends Fixture
             }
         }
 
+        //--------------------------------------------------
+        //    Création de fake commandes
+        //--------------------------------------------------
         for ($p = 0; $p < mt_rand(20, 40); $p++) {
             $purchase = new Purchase;
 
@@ -96,6 +110,9 @@ class AppFixtures extends Fixture
 
             $selectedProducts = $faker->randomElements($products, mt_rand(3, 5));
 
+            //--------------------------------------------------
+            //    Création de fake lignes de commandes
+            //--------------------------------------------------
             foreach ($selectedProducts as $product) {
                 $purchaseItem = new PurchaseItem;
                 $purchaseItem->setProduct($product)

@@ -4,15 +4,17 @@ namespace App\Form;
 
 use App\Entity\Product;
 use App\Entity\Category;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use App\Form\DataTransformer\CentimesTransformer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ProductType extends AbstractType
 {
@@ -28,6 +30,10 @@ class ProductType extends AbstractType
                 'label' => 'Description courte',
                 'attr' => ['placeholder' => 'Tapez une description assez courte mais parlante pour le visiteur'],
                 'required' => false
+            ])
+            ->add('quantity', IntegerType::class, [
+                'label' => 'Quantité de produits',
+                'attr' => ['placeholder' => 'Tapez la quantité de produits ajoutés']
             ])
             ->add('price', MoneyType::class, [
                 'label' => 'Prix du produit',

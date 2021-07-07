@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Création d'un produit
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/lux/bootstrap.min.css" crossorigin="anonymous">
+{% endblock %}
+
+{% block body %}
+	<div class="container mb-2">
+		<h1>Nouveau Produit</h1>
+
+		{# {{ form(formView) }} #}
+
+		{{ form_start(formView) }}
+
+		{{ form_errors(formView) }}
+
+		{# {{ form_widget(formView) }} #}
+
+		<div
+			class="row">
+			{# <div class="col"> #}
+			{{ form_row(formView.name) }}
+			{{ form_row(formView.price) }}
+			{{ form_row(formView.quantity) }}
+			{# {{ form_row(formView.createdAt | date(NOW)) }} #}
+			{{form_row(formView.mainPicture) }}
+			{{ form_row(formView.category, {'attr': {'class': 'form-select'} }) }}
+			{{ form_row(formView.shortDescription) }}
+			{# </div> #}
+		</div>
+
+		<button type="submit" class="btn btn-dark">
+			<i class="fas fa-save"></i>
+			Créer le produit
+		</button>
+
+		{{ form_end(formView) }}
+	</div>
+
+{% endblock %}
