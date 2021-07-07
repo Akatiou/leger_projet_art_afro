@@ -150,7 +150,7 @@ class AdminController extends AbstractController
     //---------------------------------------------------
 
     /**
-     * @Route("/admin/product/{id}/delete", name="product_delete", methods={"DELETE"})
+     * @Route("/admin/product/{id}", name="product_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Product $product): Response
     {
@@ -259,7 +259,7 @@ class AdminController extends AbstractController
     //---------------------------------------------------
 
     /**
-     * @Route("/admin/user/{id}/delete", name="user_delete", methods={"DELETE"})
+     * @Route("/admin/user/{id}", name="user_delete", methods={"DELETE"})
      */
     public function delete_user(Request $request, User $user): Response
     {

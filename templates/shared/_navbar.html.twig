@@ -6,7 +6,7 @@
 		</button>
 
 		<div class="collapse navbar-collapse" id="navbarColor03">
-			{% if app.user.roles == "ROLE_ADMIN" %}
+			{% if is_granted('ROLE_ADMIN') %}
 				<ul class="navbar-nav me-auto">
 					<li class="nav-item">
 						<a href="{{ path('product_index') }}" class="nav-link">Produits</a>
